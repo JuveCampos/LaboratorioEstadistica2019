@@ -1,4 +1,4 @@
-# laboratorioEstadistica
+# Laboratorio Estadistica
 Archivos para los alumnos del curso de estadística
 
 ## Contenido. 
