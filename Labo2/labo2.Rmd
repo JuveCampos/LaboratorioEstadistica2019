@@ -1,0 +1,280 @@
+---
+title: "Objetos y Funciones"
+author: "Juvenal Campos"
+date: "9/11/2019"
+output: html_document
+---
+
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+body {
+text-align: justify;
+}
+
+h2 {
+ color: #0f7d6e;
+}
+
+h1 {
+ color: blue;
+ text-align: center;
+}
+
+h4 {
+ color: blue;
+ text-align: center;
+}
+
+p {
+  font-family: Poppins; 
+  font-size: 20px;
+  text-align: justify;
+}
+
+li {
+  font-family: Poppins; 
+  font-size: 18px;
+  
+}
+
+
+</style>
+
+
+# Laboratorio II. 
+
+Plan de temas. 
+
+## 1.	Qué es un objeto? 
+
+En R, un objeto es un lugar en la memoria de la computadora que almacena un valor, y al cuál se le asigna un nombre. Por ejemplo: 
+
+```{r}
+x <- c(1,2,3)
+```
+
+Puede leerse como "Creamos un objeto, llamdao `x`, conteniendo los valores 1, 2 y 3". 
+
+## 2.	Tipos primarios. 
+
+En R, como ya se comentó en clase existen varios tipos de cuatro tipos de vectores atómicos: 
+
+* Tipo `logical`, que almacena información del tipo `TRUE` o `FALSE`
+
+* Tipo `integer` y tipo `numeric`, que almacenan información numérica. 
+
+* Tipo `character`, que almacena información de texto. 
+
+Asimismo, existen otros tipos de objetos, como los siguientes: 
+
+* Objetos tipo `factor`, para almacenar información categórica. 
+
+* Objetos tipo `Date`, para almacenar fechas. 
+
+E igualmente existen otras clases de objetos, como las siguientes: 
+
+* Objeto `dataframe` o `tibble`, para almacenar bases de datos en forma de tabla. 
+
+* Objeto `xts`, para almacenar Series de tiempo. 
+
+* Objeto `sf`, para almacenar información geográfica, 
+
+etc. 
+
+Todos estos objetos tienen elementos comunes, como por ejemplo: 
+
+1. Todos deben tener un *nombre* que los identifique.
+
+2. Una *clase* de objeto que les brinde atributos y características.
+
+3. *Funciones* compatibles con ese tipo de objeto. 
+
+## Declarando un objeto. 
+
+Para declarar un objeto, seguimos la estructura básica siguiente: 
+
+```{r, eval=FALSE}
+nombre_objeto <- contenido_del_objeto
+```
+
+*Nota sobre los nombres*
+
+*Prohibiciones*
+
+1. Estan prohibidos los espacios. 
+
+2. Esta prohibido llamar a un objeto `TRUE` o `FALSE` o `if` o `else` o `for` (palabras reservadas).
+
+3. Esta prohibido usar sólo números en el nombre. 
+
+4. Esta prohibido empezar un nombre con guion bajo `_` o con un número (aunque si lo pueden llevar después). 
+
+5. Pero si son tercos y no quieren respetar las prohibiciones, pueden envolver el nombre en ` ` ` (backticks). 
+
+Ejemplo: 
+
+```{r}
+`_12345Soy una variable rebelde y con un nombre extremadamente largo e innecesario` <- c(1,2,3,4,5)
+```
+
+Obviamente, esto es *cero* recomendable, pero se puede. 
+
+*Nota sobre los nombres*
+
+*Sugerencias*
+
+* Utiliza nombres cortos y útiles, que te den información de calidad sobre el contenido de la variable. 
+
+```{r}
+edad <- c(55L, 22L, 33L, 45L)
+```
+
+* De preferencia usa minúsculas. Si tu variable tiene un nombre mas o menos complejo, utiliza la forma de llamar a las variables como `camelCase`. Igualmente, puedes usar guiones bajos o puntos para separar nombres, pero no es tan recomendable. 
+
+```{r}
+iPhone <- c(TRUE, TRUE, FALSE, FALSE)
+edadViejitos <- c(100, 99, 77, 200)
+nombresAlumnos <- c("Natalia", "Luis David", "Oscar Eder", "Luis David", "Pablo", "Julio")
+nombres_laboratoristas <- c("Lila", "Pablo", "Juvenal")
+nombres.profesores <- c("Sebastian", "Salvador")
+```
+
+* Trata de usar simbolos sin acentos, o eñes, en la medida de lo posible. Igualmente, trata de usar las letras del alfabeto inglés.
+
+```{r}
+# Ejemplo, se pueden escribir nombres de variables en kanji, pero no es muy practico. 
+青春 <- "Juve en Japonés"
+print(青春)
+```
+
+## Qué es una función? 
+
+_Una función es un grupo de instrucciones que toma un "input" o datos de entrada, usa estos datos
+para computar otros valores y retorna un resultado/producto._
+
+Fuente: https://www.r-bloggers.com/lang/spanish/2512
+
+La estructura de una función es la siguiente: 
+
+## Partes de una función. 
+
+```{r, eval=FALSE}
+nombre_funcion(argumento1, argumento2, argumento3... argumentoN)
+```
+
+Generalmente, estas devuelven un resultado. 
+
+6.	Ejemplos.
+  a.	Función c()
+  
+La función `c()` es básica en R. La función de la función consiste en combinar todos sus argumentos para formar un vector. 
+Ejemplo. 
+
+```{r}
+# Nombre de la 
+# funcion
+combinación <-  c(1,2,3,TRUE, "Hola", factor("a", "b", "c"), c("VectorDentroDe Vector"), rep(1:10, 10), sum(1, 2)) 
+```
+
+## Y si no me acuerdo de los argumentos de una función?
+
+En este caso, utilizamos la ayuda o documentación de R. 
+
+Ejemplo, para acceder a la ayuda/documentación de la función `c()`, escribimos `?c`. 
+
+Y así para cada función. 
+
+  a.	Funciones exclusivas por tipo de objeto (introducción). 
+
+Los numeros tienen funciones exclusivas, como las siguientes. 
+
+```{r}
+numeros <- 1:100
+sum(numeros)    # Sumamos un conjunto de numeros
+sd(numeros)     # Obtenemos la desviacion estandar de un vector numerico
+mean(numeros)   # Obtenemos la media de un vector numerico 
+sqrt(numeros)   # Obtenemos la raiz cuadrada de cada uno de los numeros de un vector. 
+```
+
+Y asi para cada tipo de objeto. Por ejemplo, los *factores* tienen la función `levels()`, para poder acceder a sus categorías asociadas, los *character* tienen la función `paste()` para poder pegar cadenas de texto en una sola. Las fechas tienen funciones para realizar operaciones de fechas, y así, para cada uno de los tipos de objetos. 
+
+## b. Funciones para crear vectores, matrices y tibbles. (Vistas en clase, repasadas en la tarea). 
+
+Repaso. 
+
+# Ejercicio 1. 
+
+Explique la diferencia entre las siguientes instrucciones. 
+
+```{r}
+
+# Instruccion 1
+c(1,2,3)
+
+# Instruccion 2
+a <- c(1,2,3)
+
+```
+
+# Ejercicio 2. 
+
+Explique como imprimir los valores del siguiente vector
+
+```{r}
+printMe <- c("Imprimeme!!", "Imprimeme!!", "Imprimeme!!")
+```
+Igualmente, explique que significa el `[1]` que aparece del lado izquierdo de la impresión de la consola. 
+
+# Ejercicio 3. 
+
+* Explique dos formas de obtener un vector que tenga los siguientes valores. 
+
+*1  2  3  4  5  6  7  8  9 11 12 13 14 15 16 17 18 19 21 22 23 24 25 26 27 28 29*
+
+# Ejercicio 4. 
+
+* Explique como construir un *vector* que repita 50 veces la frase: "Mi nombre es: "
+
+* Construya *dos vectores con cincuenta nombres propios* (repetidos o no, pero al menos mas de 2), y genere una matriz con el vector construido en el ejercicio anterior. 
+
+* A dicha matriz, *añádale un numero de lista* unico.
+
+* Genere un `dataframe` con dicha información (use la funcion `data.frame` o transforme la matriz con la funcion `as.data.frame()`)
+
+* Genere una `tibble` con dicha información. 
+
+# Respuesta.
+
+```{r}
+# 1. * Explique como construir un vector que repita 50 veces la frase: "Mi nombre es: "
+frase <- rep("Mi nombre es: ", times = 50)
+frase
+
+# 2. * Construya dos vectores con cincuenta nombres propios (repetidos o no, pero al menos mas de 2), y genere una matriz con el vector construido en el ejercicio anterior. 
+nombres <- rep(c("Melchor", "Gaspar", "Baltazar", "Olga", "Eugenia"), times = 10)
+nombres <- sample(nombres) # Funcion sample()
+nombres
+
+matriz <- cbind(frase, nombres) # La funcion genera automaticamente una matriz
+matriz
+
+# 3. * A dicha matriz, añádale un numero de lista unico.
+matriz <- cbind(matriz, 1:50)
+matriz
+
+# 4. * Genere un dataframe con dicha información (use la funcion data.frame o transforme la matriz con la funcion as.data.frame*())
+baseDeDatos <- as.data.frame(matriz)
+class(baseDeDatos)
+baseDeDatos
+
+# 5. * Genere una tibble con dicha información. 
+library(tibble)
+tibbla <- as_tibble(baseDeDatos)
+names(tibbla) <- c("Frase", "Nombre", "No_Lista")
+tibbla
+
+# Hemos terminado. 
+```
+
