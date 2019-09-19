@@ -1,0 +1,151 @@
+---
+title: "Sesion 3"
+author: "Juvenal Campos"
+date: "9/19/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+body {
+text-align: justify;
+}
+
+h2 {
+ color: #0f7d6e;
+}
+
+h1 {
+ color: blue;
+ text-align: center;
+}
+
+h4 {
+ color: blue;
+ text-align: center;
+}
+
+p {
+  font-family: Poppins; 
+}
+
+</style>
+
+## Leer una base de datos. 
+
+En este caso, vamos a leer una base de datos que está almacenada desde internet. Para esto utilizaremos la función `read_delim` de la librería `readr`. 
+
+```{r}
+library(readr)
+
+carpetas <-  read_delim("http://segasi.com.mx/clases/cide/datos/carpetas-de-investigacion-pgj-de-la-ciudad-de-mexico_modificado.csv", 
+    ";", 
+    escape_double = FALSE, 
+    trim_ws = TRUE, skip = 6)
+
+```
+
+## Explorando la base de datos 
+
+Exploramos la base de datos. Para esto, utilizamos las funciones `dim()` y `glimpse`.
+
+```{r}
+library(tidyverse)
+
+class(carpetas)
+
+# Funcion para conocer las dimensiones de la base de datos
+dim(carpetas)
+
+# Para dar un vistazo a la base de datos
+glimpse(carpetas)
+
+```
+
+## Limpieza de datos. 
+
+**¿En qué consiste limpiar una Base de datos?**
+
+Consiste en pasar de una base cruda a una base que tenga exactamente la información que queremos. 
+
+```{r}
+# Limpiar base de datos. 
+# Queremos las 5 calles mas peligrosas de la ciudad de Mexico. 
+
+#####################
+# Son equivalentes. #
+####################
+
+# Con el argumento sort desde la funcion count
+carpetas %>% 
+  count(calle_hechos, sort = TRUE)
+
+# Con la funcion arrange y la funcion desc() de ordenamiento descendiente. 
+carpetas %>% 
+  count(calle_hechos) %>% 
+  arrange(desc(n))
+
+# Guardando la nueva base en un objeto llamado noCaminesPorAhi, pasando el argumento -n a la funcion arrange. 
+noCaminesPorAhi <- carpetas %>% 
+  count(calle_hechos) %>%
+  arrange(-n) 
+noCaminesPorAhi
+
+# Ahora, a esta base le recortamos las 5 calles más peligrosas y le renombramos las variables. 
+
+noCaminesPorAhi %>%
+  head(n = 5) %>%
+  rename(Calles = calle_hechos,
+         No_Delitos = n) # Primero nombre nuevo, luego igual, y luego nombre viejo
+
+```
+
+
+## Utilizar los verbos select y filter
+
+```{r}
+
+# Seleccionamos la columna fecha_hechos y todas las variables que contengan el caracter 2. 
+carpetas %>% 
+  select(fecha_hechos, contains("2"))
+
+# Seleccionamos la columna fecha_hechos y todas las columnas que terminen con ito, las que empiecen con a y las que contengan fec, y las guardamos en un objeto que se llame baseNueva
+baseNueva <- carpetas %>% 
+  select(fecha_hechos, 
+         ends_with("ito"), 
+         starts_with("a"), 
+         contains("fec")) 
+
+# A esta base nueva le filtramos lo siguiente: 
+# 1. Las observaciones que sean de la alcaldia Benito Juarez o de la Alcaldia Coyoacan, 
+# 2. de estas, las que correspondan solamente a la categoria de Delitos de Bajo Impacto 
+# 3. y de estas, las que hayan ocurrido entre el 2 y el 30 de agosto
+
+baseNueva %>% 
+  filter(alcaldia_hechos == "BENITO JUAREZ" | alcaldia_hechos == "COYOACAN", 
+         categoria_delito == "DELITO DE BAJO IMPACTO",
+         fecha_hechos > "2019-08-01" & fecha_hechos < "2019-08-31 00:00:00")
+
+# Estos dos cachitos de codigo se pueden escribir en una sola cadena: 
+nuevaNuevaBase <- carpetas %>% 
+  select(fecha_hechos, 
+         ends_with("ito"), 
+         starts_with("a"), 
+         contains("fec")) %>% 
+  filter(alcaldia_hechos == "BENITO JUAREZ" | alcaldia_hechos == "COYOACAN", 
+         categoria_delito == "DELITO DE BAJO IMPACTO",
+         fecha_hechos > "2019-08-01" & fecha_hechos < "2019-08-31 00:00:00")
+
+# Todo Junto. 
+
+
+
+```
+
+Suerte en el exámen chicos.
+
+
