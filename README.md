@@ -15,5 +15,6 @@ Presentación y código RMarkdown de la sesión 2, donde hicimos un repaso del c
 
 Repasamos los primeros verbos del `tidyverse` para la limpieza y manipulación de datos, así como práctica para abrir bases de datos. Estos verbos son: `filter`, `select` y `arrange`. Para ver una versión en HTML de esta sesión ir a este [enlace](http://rpubs.com/Juve_Campos/sesion3LaboratorioEstadistica). 
 
+**Labo 4**
 
-
+Sesión de repaso. En esta sesión repasamos el concepto de NAs, el de suma de vectores lógicos y suma de factores, así como aprender a cargar bases de datos geográficas y bases de datos guardadas en GitHub. Para ver una versión de esta sesión ir a este [enlace](http://rpubs.com/Juve_Campos/laboEstadisticaSesion4). 
