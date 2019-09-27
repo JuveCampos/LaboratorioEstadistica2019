@@ -1,0 +1,217 @@
+---
+title: "Sesion 4"
+author: "Jorge Juvenal Campos Ferreira"
+output: html_document
+---
+
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+body {
+text-align: justify;
+}
+
+h2 {
+ color: #0f7d6e;
+}
+
+h1 {
+ color: blue;
+ text-align: center;
+}
+
+h4 {
+ color: blue;
+ text-align: center;
+}
+
+p {
+  font-family: Poppins; 
+}
+
+</style>
+
+# Sesión 4. Repaso y Refuerzo.
+
+En esta sesión vamos a dar un refuerzo a algunos temas que valen la pena repasarse. 
+
+## 1. Naturaleza del `NA`.
+
+El `NA` es la forma que toman los valores inexistentes dentro de una base de datos.
+
+`NA` es el acrónimo en R para _No disponible_.
+
+## ¿Por qué surgen los `NA`?
+
+Hay varios motivos para que surgan `NA`s. Entre los más comunes se encuentran los siguientes: 
+
+**1. Surgen como resultado de una mala aplicación de una función.** 
+
+Ejemplo: 
+
+```{r}
+# Ejemplo 1. Cuando queremos transformar un vector de un tipo a otro. 
+library(tidyverse)
+
+# Creamos un vector de texto
+vec <- c("1", "Rabanos", "Cebollas", "Cilantro")
+# Lo convertimos a numerico (NO TIENE SENTIDO!)
+vec2 <- vec %>% as.numeric()
+vec2
+```
+
+```{r}
+# Ejemplo 2. Cuando declaramos los niveles de un factor de manera incompleta 
+
+# Generamos un vector de texto
+texto <- c("arriba", "abajo", "de un lado", "para el otro", "arriba", "arriba", "abajo")
+
+# Convertimos a factor el vector de texto
+categorico <- factor(texto, 
+                     ordered = TRUE, 
+                     levels = c("arriba", "abajo", "de un lado")
+                     )
+
+# Imprimimos el vector categorico
+print(categorico)
+
+# Como podemos ver, 
+
+```
+
+Como podemos ver arriba, el elemento 4 del vector es un valor `NA`. Esto es por que a la hora de ordenar las categorías del factor la observación `para el otro` quedó fuera de las categorías declaradas. 
+
+**Es por eso que siempre hay que fijarse en que le damos todas las categorías al vector categórico.**
+
+**2. El que elaboró la base de datos no pudo registrar el dato correspondiente. **
+
+En la siguiente imagen, vemos una base de datos que tiene celdas vacías. Si la importamos en R, todas esas celdas se van a importar como `NA`s. 
+
+! [Alt text](Imagenes/BaseVacia.png)
+
+```{r, message=FALSE, warning=FALSE}
+# Leemos la base de datos
+bd <- readxl::read_xlsx("01 Datos/DesgloseAguasResiduales.xlsx", skip = 1)
+
+# Imprimimos la base de datos. 
+bd
+```
+
+**3. En caso de encuestas, el entrevistado se negó a responder una pregunta dada, y el entrevistador tuvo que rellenar con un dato _No Disponible_**.
+
+**Pregunta. Si un entrevistador te pregunta cuanto ganas al mes... ¿qué le contestas?**
+
+Hay que tener cuidado con estos `NA`s, porque incluso el silencio puede decirnos algo. (Imagina que pregunta )
+
+## ¿Qué hacemos con los `NA`s?
+
+Tenemos 3 opciones: 
+
+<b style = 'color:green; font-size:green'>1. Los ignoramos. </b>
+
+```{r}
+# Sumamos los elementos del siguiente vector. 
+vec1 <- c(1:100, NA, NA)
+sum(vec1)
+
+# Nos da NA Para que no nos de NA, utilizamos el argumento na.rm para que ignore los NAs del vector.
+sum(vec1, na.rm = TRUE)
+
+```
+
+<b style = 'color:green; font-size:green'>2. Los eliminamos.</b> 
+
+```{r}
+# Si queremos eliminar los NAs en un vector, utilizamos la funcion na.omit()
+vector_sin_NAs <- vec1 %>% na.omit()
+vector_sin_NAs <- na.omit(vec1)
+
+# Imprimimos el vector de NAs
+vector_sin_NAs
+```
+
+<b style = 'color:green; font-size:green'>3. Los rellenamos.</b> 
+```{r}
+# Vamos a rellenar los NAs con un cero. 
+is.na(vec1) # Me da un vector logico
+vec1 %>% is.na()
+
+vec1[is.na(vec1)] <- 0 # Esto sustituye los NAs con ceros. 
+# Esto es R antiguo. En clase veremos como hacerlo de manera moderna. 
+
+# Imprimimos el vec1 con NAs reemplazados. 
+vec1
+# Vemos que ya no tenemos NAs. 
+```
+
+## 2. Suma de `logicals`, suma de `factores`.
+
+**Cambio de tema.** Ahora, veremos si se pueden sumar vectores de clase `logical` y categóricos `factors`. 
+
+```{r}
+# Supongamos el siguiente vector logico 
+veclog <- c(T, T, TRUE, FALSE, F)
+
+# Ahora lo sumamos. Que paso? 
+sum(veclog)
+```
+
+La suma de un vector logico funciona porque por debajo, R interpreta los vectores logicos como un vector de ceros y unos. 
+
+Entonces... se puede hacer lo mismo con los vectores factores, que tienen numeros por debajo? Veamos. 
+
+```{r}
+categorico
+# sum(categorico) # No lo corro porque da el error siguiente: 
+
+# Error in Summary.ordered(c(1L, 2L, 3L, NA, 1L, 1L, 2L), na.rm = FALSE) : 'sum' not defined for ordered factors
+```
+
+Nos da Error. Esto pasa porque lo que tiene por debajo no son numeros, sino texto. 
+
+**Lección!** _Si se pueden sumar variables lógicas, pero no se pueden sumar variables categóricas del tipo factor._ 
+
+## 3. Leer otros tipos de archivos.
+
+**Bases de datos geográficas**
+
+Las bases de datos geográficas son bases que almacenan información relacionada con puntos, lineas o lugares en el espacio. Estos datos se almacenan, típicamente, en archivos del tipo `*.geojson` o `*.shp`. 
+
+En esta ocasión, vamos a leer un archivo `.geojson`. Primero descargamos la libreria `sf`. 
+
+```{r, eval=FALSE}
+# Si no lo tienes instalado, instala esta libreria con el siguiente comando: 
+install.packages("sf")
+## Nota: Tienes que tener la 'ultima version de R disponible. Si tienes problemas al descargar esta libreria, mandame mensaje. 
+```
+
+Una vez instalada, llamamos el siguiente código. 
+
+```{r}
+# Llamamos a la libreria: 
+library(sf)
+
+# Guardamos la base de datos siguiente, CUYA UBICACION EXACTA LA VIMOS EN GITHUB EN EL LABORATORIO, en un objeto llamado "obj". 
+
+obj <- st_read("https://raw.githubusercontent.com/JuveCampos/MexicoSinIslas/master/Sin_islas_simplificado.geojson")
+
+# Vemos que clase es el objeto "obj". 
+class(obj) # El objeto es del tipo sf, el cual es el tipico para guardar bases de datos. 
+
+# Visualizamos que efectivamente tenemos una base de datos geografica: 
+
+# Este codigo solo me plotea (grafica) el mapa para la primera variable de la base de datos. 
+plot(obj, max.plot = 1)
+
+# Este codigo me plotea el mapa para las primeras 8 variables de las bases de datos. 
+plot(obj)
+```
+
+<b style = 'color:red;'>Advertencia!</b> 
+
+Si no le pones el argumento `max.plot = 1`, y tu base de datos es muy grande (por ejemplo, de los 2,000 municipios), tu sesión de RStudio va a crashear (se va a trabar, va a dejar de funcionar). Y vas a tener que reiniciar el programa. 
+
+## 4. Ejercicio Práctico. 
+
+Este queda pendiente para la siguiente clase 😉.
