@@ -18,3 +18,8 @@ Repasamos los primeros verbos del `tidyverse` para la limpieza y manipulación d
 **Labo 4**
 
 Sesión de repaso. En esta sesión repasamos el concepto de NAs, el de suma de vectores lógicos y suma de factores, así como aprender a cargar bases de datos geográficas y bases de datos guardadas en GitHub. Para ver una versión de esta sesión ir a este [enlace](http://rpubs.com/Juve_Campos/laboEstadisticaSesion4). 
+
+**Labo 5**
+
+Sesión de repaso. En esta sesión aprendimos a cargar bases de datos `*.shp`, y practicamos algunos verbos del `tidyverse`. Igualmente, se introducen al final las funciones `pull()` para extraer vectores a partir de columnas de `tibbles/dataframes` y la función `case_when()` para recodificar una variable en base a una multitud de condiciones. 
+
