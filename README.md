@@ -25,4 +25,4 @@ Sesión de repaso. En esta sesión aprendimos a cargar bases de datos `*.shp`, y
 
 **Labo 6**
 
-Sesión de repaso de ggplot. En esta sesión seguímos el flujo de trabajo que va desde limpiar una base de datos con `dplyr - tidyverse` hasta generar una gráfica con cierta interactividad con `plotly`, repasando conceptos básicos como **temas**, **aestéticos (aesthetics)**, **colores** y **reordenamiento** básico de variables para graficar. 
+Sesión de repaso de ggplot. En esta sesión seguímos el flujo de trabajo que va desde limpiar una base de datos con `dplyr - tidyverse` hasta generar una gráfica con cierta interactividad con `plotly`, repasando conceptos básicos como **temas**, **aestéticos (aesthetics)**, **colores** y **reordenamiento** básico de variables para graficar. La versión en línea se encuentra en este [enlace](http://rpubs.com/Juve_Campos/ggplot7).
