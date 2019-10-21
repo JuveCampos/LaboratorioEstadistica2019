@@ -1,0 +1,282 @@
+---
+title: "Votos del Bronco para repasar ggplot"
+author: "Juvenal Campos"
+date: "10/17/2019"
+output: html_document
+---
+
+# Grafica de Barras: 
+
+# 1. Descargamos los datos del examen: 
+
+```{r}
+# Leemos la base de datos_
+el_dist <- read.csv("http://segasi.com.mx/clases/cide/datos/cp_2018_dtto.csv")
+```
+
+# Proposito de la grafica: 
+
+Vamos a elaborar una grafica de barras en la cual observemos la votacion del bronco a nivel estatal. 
+
+Primero: Limpiamos la base: 
+
+```{r}
+library(tidyverse)
+names(el_dist)
+
+v_bronco_edo <- el_dist %>% 
+  group_by(edo_min) %>% 
+  summarise(v_bronco_edo = sum(v_bronco, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  arrange(-v_bronco_edo)
+
+v_bronco_edo
+
+```
+
+Segundo: Una vez que limpiamos la base, graficamos las barras. 
+
+```{r}
+?ggplot
+
+# De la ayuda vemos que los argumentos son los siguientes:
+# ggplot(data = NULL, mapping = aes(), ...,
+#   environment = parent.frame())
+
+ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo)) + 
+  geom_bar(stat = "identity")
+
+# Aqui vemos que algo sucedio... 
+
+```
+
+Detalles de la gráfica: 
+
+1. Esta toda gris. 
+2. Tiene notacion científica. 
+3. Los nombres de los ejes estan feos. 
+4. Los nombres de los estados se estorban mucho. 
+5. El fondo se ve feo. 
+6. No se vería mejor si las barras estuvieran ordenadas de mayor a menor? 
+
+**Muy observadores... procederemos a solucionar cada una de sus observaciones: **
+
+# 1. Esta toda gris. 
+
+Vamos a asignar un color a cada estado con los aesteticos. 
+(Notemos que si no especificamos colores, se ponen unos por default).
+
+```{r}
+
+# Codigo viejo
+ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo)) + 
+  geom_bar(stat = "identity")
+
+# Codigo nuevo
+ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo, 
+                                          fill = edo_min)) + 
+  geom_bar(stat = "identity")
+```
+
+# 2. Tiene notacion científica. 
+
+Esto se solucionaba con el `options(scipen = 999)` que se me olvidó poner al inicio. 
+
+```{r}
+options(scipen = 999)
+# Codigo nuevo
+ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo, 
+                                          fill = edo_min)) + 
+  geom_bar(stat = "identity")
+
+```
+
+
+
+# 3. Los nombres de los ejes estan feos.
+
+Esto se cambia sumandole una nueva capa de etiquetas, con la función `labs` de labels. 
+
+```{r}
+
+# Codigo viejo
+ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo, 
+                                          fill = edo_min)) + 
+  geom_bar(stat = "identity")
+
+# Codigo nuevo (como ya es mucho codigo lo guardamos en un objeto)
+plot <- ggplot(data = v_bronco_edo, mapping = aes(x = edo_min, y = v_bronco_edo, 
+                                          fill = edo_min)) + 
+  geom_bar(stat = "identity") +
+  labs(title = "Votos del Bronco a nivel estado", 
+       subtitle = "Elecciones para la presidencia nacional de México, 2018", x = "", 
+       y = "Numero de votos", 
+       caption = "Fuente: Datos de @segasi, por lo que son verdad"
+       )
+
+# Imprimimos la grafica
+plot
+
+```
+
+# 4. Los nombres de los estados se estorban mucho. 
+
+Para solucionar esto, vamos a sumar una nueva capa de cambio de eje, con la función `coord_flip()`. 
+
+```{r}
+plot + 
+  coord_flip()
+```
+
+
+
+# 5. El fondo se ve feo.
+
+Pues lo ponemos blanco. Para eso, le sumamos una capa de tema predeterminado (en este caso, fondo blanco con líneas grises codificado en `theme_bw()`).
+
+```{r}
+
+# Le aniadimos un fondo blanco. 
+plot + theme_bw()
+```
+
+
+# 6. No se vería mejor si las barras estuvieran ordenadas de mayor a menor? 
+
+Para esto, tendremos que rehacer la gráfica (este debió ser el primer cambio!!!)
+
+```{r}
+
+# Grafica completa: 
+plot_final <- ggplot(data = v_bronco_edo, 
+       mapping = aes(x = reorder(edo_min, v_bronco_edo), 
+                     y = v_bronco_edo, 
+                     fill = edo_min)) + 
+  geom_bar(stat = "identity") +
+  labs(title = "Votos del Bronco a nivel estado", 
+       subtitle = "Elecciones para la presidencia nacional de México, 2018",        x = "", 
+       y = "Numero de votos", 
+       caption = "Fuente: Datos de @segasi, por lo que son verdad"
+       ) + 
+  coord_flip() + 
+  theme_bw()
+
+plot_final
+
+```
+
+Otras preguntas siguientes que valdría la pena hacerse serían las siguientes: 
+
+1. Podemos quitar esa molesta e invasiva escala? 
+
+2. Podemos modificar el tipo de letra del título y subtítulo? 
+
+3. Podemos personalizar los colores de las barras? 
+
+4. Podemos ponerle unas comas a los numeros de los votos? 
+
+5. Podemos hacer que si el usuario pasa el mouse por cada una de las barras, se despliegue una ventanita bonita? 
+
+Pues si, todo eso se puede con ggplot(). 
+
+## 1. Podemos quitar esa molesta e invasiva escala? 
+
+## 2. Podemos modificar el tipo de letra del título y subtítulo? 
+
+Para esto utilizamos los temas 
+
+```{r}
+tema_juve <- theme_bw() + 
+  theme(text = element_text(family = "Asap-Bold", color = "#25636e"), 
+                                panel.grid.major = element_blank(),
+                                panel.grid.minor = element_blank(), 
+                                plot.caption=element_text(hjust=1,size=9,colour="grey30"),
+                                plot.subtitle=element_text(face="italic",size=12,colour="grey40"),
+                                plot.title=element_text(size=18,face="bold"),
+                                axis.text.x = element_text(family = "Asap-Bold", color = "#25636e"),
+                                axis.text.y = element_text(family = "Asap-Bold", color = "#25636e"), 
+                                legend.position = "none")
+
+plot_final + tema_juve
+
+```
+
+
+## 3. Podemos personalizar los colores de las barras? 
+
+Si! 
+
+```{r}
+
+ggplot(data = v_bronco_edo, 
+       mapping = aes(x = reorder(edo_min, v_bronco_edo), 
+                     y = v_bronco_edo, 
+                     fill = edo_min)) + 
+  geom_bar(stat = "identity", fill = c(rep("blue", 15), rep("red", 17))) +
+  labs(title = "Votos del Bronco a nivel estado", 
+       subtitle = "Elecciones para la presidencia nacional de México, 2018",        x = "", 
+       y = "Numero de votos", 
+       caption = "Fuente: Datos de @segasi, por lo que son verdad"
+       ) + 
+  coord_flip() + 
+  theme_bw() + 
+  tema_juve
+  
+```
+
+
+## 4. Podemos ponerle unas comas a los numeros de los votos? 
+
+Si
+
+```{r}
+
+ggplot(data = v_bronco_edo, 
+       mapping = aes(x = reorder(edo_min, v_bronco_edo), 
+                     y = v_bronco_edo, 
+                     fill = edo_min)) + 
+  geom_bar(stat = "identity", fill = c(rep("blue", 15), rep("red", 17))) +
+  labs(title = "Votos del Bronco a nivel estado", 
+       subtitle = "Elecciones para la presidencia nacional de México, 2018",        x = "", 
+       y = "Numero de votos", 
+       caption = "Fuente: Datos de @segasi, por lo que son verdad"
+       ) + 
+  coord_flip() + 
+  theme_bw() + 
+  tema_juve + 
+  scale_y_continuous(labels = scales::dollar_format(prefix = "", suffix = " votos"), 
+                     expand = c(0.02,0))
+```
+
+
+## 5. Podemos hacer que si el usuario pasa el mouse por cada una de las barras, se despliegue una ventanita bonita? 
+
+Obvio si, pero necesitamos un poco de ayuda de la libreria `plotly`
+
+```{r}
+
+plot_fina_final <- ggplot(data = v_bronco_edo, 
+       mapping = aes(x = reorder(edo_min, v_bronco_edo), 
+                     y = v_bronco_edo, 
+                     fill = edo_min)) + 
+  geom_bar(stat = "identity", fill = c(rep("blue", 15), rep("red", 17))) +
+  labs(title = "Votos del Bronco a nivel estado", 
+       subtitle = "Elecciones para la presidencia nacional de México, 2018",        x = "", 
+       y = "Numero de votos", 
+       caption = "Fuente: Datos de @segasi, por lo que son verdad"
+       ) + 
+  coord_flip() + 
+  theme_bw() + 
+  tema_juve + 
+  scale_y_continuous(labels = scales::dollar_format(prefix = "", suffix = " votos"), 
+                     expand = c(0.02,0))
+
+library(plotly)
+
+ggplotly(plot_fina_final)
+
+```
+
+Esto se puede modificar mas, pero por hoy, es suficiente. 
+
+Fin :)
