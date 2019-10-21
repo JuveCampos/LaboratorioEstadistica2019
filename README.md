@@ -23,3 +23,6 @@ Sesión de repaso. En esta sesión repasamos el concepto de NAs, el de suma de v
 
 Sesión de repaso. En esta sesión aprendimos a cargar bases de datos `*.shp`, y practicamos algunos verbos del `tidyverse`. Igualmente, se introducen al final las funciones `pull()` para extraer vectores a partir de columnas de `tibbles/dataframes` y la función `case_when()` para recodificar una variable en base a una multitud de condiciones. 
 
+**Labo 6**
+
+Sesión de repaso de ggplot. En esta sesión seguímos el flujo de trabajo que va desde limpiar una base de datos con `dplyr - tidyverse` hasta generar una gráfica con cierta interactividad con `plotly`, repasando conceptos básicos como **temas**, **aestéticos (aesthetics)**, **colores** y **reordenamiento** básico de variables para graficar. 
