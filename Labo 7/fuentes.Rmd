@@ -1,0 +1,231 @@
+---
+title: "Uso de fuentes en RStudio para ggplot"
+author: "Juvenal Campos"
+date: "10/20/2019"
+output: html_document
+---
+
+<style>
+h1 {
+   color: #02755a;
+   text-align: center;
+}
+
+h2 {
+  color: #02755a; 
+  text-align: center; 
+}
+
+h3 {
+  color: #02755a; 
+  text-align: center; 
+}
+
+h4 {
+  text-align: center; 
+}
+
+
+p {
+  text-align: justify;
+  font-family: Poppins; 
+  size: 45px;
+  font-size: large;
+}
+
+code {
+  text-align: justify;
+  size: 45px;
+  font-size: large;
+}
+
+code.hljs {
+  text-align: justify;
+  size: 45px;
+  font-size: large;
+}
+
+
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "###---")
+```
+
+## Librerias necesarias
+
+Para hoy vamos a utilizar las siguientes librerías:
+
+```{r, message=FALSE, warning=FALSE, cache=FALSE}
+library(tidyverse) # Para manejar bases de datos
+library(stringr)   # Para manejar texto
+library(rebus)     # Para manejar expresiones regulares facil!
+```
+
+## Fuentes dentro del sistema . 
+
+Los usuarios de Mac  pueden acceder a las fuentes que tengan instaladas en su carpeta `~/Library/Fonts/` con el código que se muestra a continuación.
+
+```{r}
+#########################
+# Fuentes en el sistema #
+########################
+fuentes_Sys <- list.files("~/Library/Fonts/") %>% 
+  str_remove_all(pattern = "." %R% capture(one_or_more(WRD)) %R% END)
+# La ultima linea remueve la extensión de los archivos.
+```
+
+__Nota:__ En Windows y otros, seguramente hay alguna otra forma de acceder a las fuentes dentro del sistema.
+
+En la computadora, los tipos de letra se guardan en archivos con extensión `*.otf` y `*.ttf` (para saber la diferencia y más información sobre estos archivos, acudir al siguiente [enlace](https://356labs.com/blog/otf-vs-ttf-whats-the-difference/)). 
+
+El problema es que, a veces, muchas de esas fuentes no son compatibles con RStudio, o con R, o con la librería `ggplot2`. Cuando esto sucede, hay que considerar en utilizar otro tipo de letra o en buscar otro archivo de instalación de las fuentes. 
+
+Si se requiere descargar fuentes, se recomiendan las siguientes páginas: 
+
+1. https://www.fontsquirrel.com
+
+2. https://www.1001fonts.com
+
+3. https://fonts.google.com
+
+__Nota: __ Hay que checar _siempre_ que las fuentes sean gratuitas y de uso libre sin fines comerciales. 
+
+Una vez que entramos a estas páginas y descargamos una fuente en formato `*.otf`, tenemos que abrir e instalar el archivo. Tras hacer esto, la fuente ya se encontrará en la carpeta `~/Library/Fonts/` y, si esta es compatible con R y `ggplot`, podrá ser usada en nuestras gráficas. 
+
+```{r, echo = FALSE}
+
+#########################
+# Fuentes en el sistema #
+########################
+fuentes_Sys <- read.csv("fuentes_Sys.csv") %>% 
+  pull(x) %>% as.character()
+```
+
+## Usando la librería `extrafont`.
+
+Para otro tipo de SO (Sistema Operativo) utilizaremos la librería `extrafont`, cuya documentación puede verse en este [enlace](https://cran.r-project.org/web/packages/extrafont/README.html). 
+
+Esta librería/paquete nos permite descargar al sistema de R y RStudio las fuentes que se encuentran disponibles en el sistema operativo, y hacerlas disponibles para nuestras gráficas de `ggplot`.
+
+Para ello, primero debemos instalar la librería con los comandos siguientes. _Nota: Correr esto solo una vez!_. 
+
+```{r, eval=FALSE}
+install.packages("extrafont")
+font_import() 
+# Importa fuentes de donde las tengamos
+# (Solo lo corremos una vez, y al principio, para bajar fuentes desde la compu).
+```
+
+Una vez que importamos las fuentes a R, ya tenemos una lista de aquellas que podemos utiliar para nuestras gráficas. 
+
+```{r}
+#############################
+# Fuentes fuera del sistema #
+#############################
+library(extrafont)
+
+# Guardamos los nombres de estas fuentes como cadena de texto. 
+fuentes_Imp <- fonts() 
+```
+
+## Todas las fuentes disponibles
+
+Armamos un vector con todas las fuentes disponibles en la computadora. 
+
+```{r}
+# Fuentes totales 
+fuentes <- append(fuentes_Imp, fuentes_Sys) %>% 
+  unique() %>% 
+  sort()
+
+# Quitamos el primer elemento (en mi caso un espacio vacío)
+fuentes <- fuentes[-1]
+
+# Objeto con todos los nombres de todas las fuentes:
+fuentes 
+```
+
+Yo en mi computadora tengo acceso a 151 fuentes diferentes. <b style = 'color: red;'>Este resultado puede variar entre computadoras</b>. 
+
+## Cargamos la base de datos 
+
+Para hacer una gráfica demo de manera rápida, utilizaremos una de las bases de datos que R trae pre-instaladas --la famosa base de datos `Iris`--. Si deseas conocer el contenido y la historia de esta base, te recomiendo visitar este [enlace](https://en.wikipedia.org/wiki/Iris_flower_data_set).
+
+
+```{r}
+# Para precargar la base Iris preconstruida en RStudio. 
+data("iris")
+```
+
+
+![](https://i.redd.it/spvecvckksn01.jpg)
+
+__Nota:__ Si quieres saber que otras bases de datos tiene pre-instaladas RStudio, utiliza la función `data()` en la terminal. 
+
+## Elaboramos gráficas de prueba. 
+
+A continuación, elaboramos gráficas para comprobar que efectivamente se pueden utilizar otro tipo de fuentes en nuestra computadora. 
+
+Para esto, generamos una función propia que genere gráficas, tomando como argumento sólamente el tipo de letra. 
+
+```{r}
+# Gráfica de la base Iris
+grafica_fuentes <- function(i = "Arial"){
+  grafica <- iris %>% 
+    ggplot(aes(x = Sepal.Width, y = Sepal.Length, color = Species)) + 
+    geom_point(stat = "identity", size = 4, color = "#000000") + 
+    geom_point(stat = "identity", size = 3) + 
+    labs(title = paste0('Grafica usando fuente: '), 
+         subtitle = paste0('"', i, '"'), 
+         x = "Eje x = Sepal.Width", 
+         y = "Eje y = Sepal.Length") + 
+    theme_bw() + 
+    theme(text = element_text(family=i, size = 15), 
+          plot.subtitle = element_text(color = "red", 
+                                       family = i, 
+                                       size = 30)) 
+  return(grafica)
+}
+
+```
+
+### 1. Gráfica con la fuente Arial
+
+Para esta gráfica (y las subsecuentes) hay que verificar que el nombre de la fuente esté dentro del vector de `fuentes`. 
+
+```{r}
+grafica_fuentes(i = "Arial")
+```
+
+### 2. Gráfica con la fuente Avenir Next
+
+```{r}
+grafica_fuentes(i = "Avenir Next")
+```
+
+### 3. Gráfica con la fuente Asap-Bold
+
+```{r}
+grafica_fuentes(i = "Asap-Bold")
+```
+
+### 4. Gráfica con la fuente Luminari
+
+```{r}
+grafica_fuentes(i = "Luminari")
+```
+
+### 5. Gráfica con la fuente Wingdings
+
+```{r}
+grafica_fuentes(i = "Wingdings")
+```
+
+### 6. Gráfica con la fuente Times New Roman
+
+```{r}
+grafica_fuentes(i = "Times New Roman")
+```
+
