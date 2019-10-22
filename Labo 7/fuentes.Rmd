@@ -76,7 +76,7 @@ fuentes_Sys <- list.files("~/Library/Fonts/") %>%
 # La ultima linea remueve la extensión de los archivos.
 ```
 
-__Nota:__ En Windows y otros, seguramente hay alguna otra forma de acceder a las fuentes dentro del sistema.
+__Nota:__ En Windows y otros, seguramente hay alguna otra forma de acceder a las fuentes dentro del sistema. En este caso, te recomiendo que pases a la sección de la librería `extrafont`.
 
 En la computadora, los tipos de letra se guardan en archivos con extensión `*.otf` y `*.ttf` (para saber la diferencia y más información sobre estos archivos, acudir al siguiente [enlace](https://356labs.com/blog/otf-vs-ttf-whats-the-difference/)). 
 
@@ -113,7 +113,7 @@ Para ello, primero debemos instalar la librería con los comandos siguientes. _N
 
 ```{r, eval=FALSE}
 install.packages("extrafont")
-font_import() 
+extrafonts::font_import() 
 # Importa fuentes de donde las tengamos
 # (Solo lo corremos una vez, y al principio, para bajar fuentes desde la compu).
 ```
@@ -193,7 +193,7 @@ grafica_fuentes <- function(i = "Arial"){
 
 ### 1. Gráfica con la fuente Arial
 
-Para esta gráfica (y las subsecuentes) hay que verificar que el nombre de la fuente esté dentro del vector de `fuentes`. 
+Para esta gráfica (y las subsecuentes) hay que verificar que el nombre de la fuente esté dentro del vector de `fuentes`. Muy seguramente (y dependiendo del SO) los tipos de letras pueden variar. Como experimento, puedes buscar y descargar los tipos de letra que se mencionan más adelante y probarlos en tu computadora. 
 
 ```{r}
 grafica_fuentes(i = "Arial")
@@ -201,11 +201,15 @@ grafica_fuentes(i = "Arial")
 
 ### 2. Gráfica con la fuente Avenir Next
 
+Esta fuente la descargué de los enlaces mostrados previamente. 
+
 ```{r}
 grafica_fuentes(i = "Avenir Next")
 ```
 
 ### 3. Gráfica con la fuente Asap-Bold
+
+Este es la fuente oficial del LNPP. Puedes descargarla de los enlaces de descarga de fuentes mostrados anteriormente. 
 
 ```{r}
 grafica_fuentes(i = "Asap-Bold")
@@ -229,3 +233,6 @@ grafica_fuentes(i = "Wingdings")
 grafica_fuentes(i = "Times New Roman")
 ```
 
+## Otras fuentes. 
+
+En Windows, intenta utilizar la fuente `Comic Sans MS` o la `Papyrus`, para practicar. 
