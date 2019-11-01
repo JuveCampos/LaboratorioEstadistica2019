@@ -1,0 +1,170 @@
+# 
+# # Primero. Leemos la base de datos. 
+# 
+# Como esto es repaso de la tarea, leemos los datos de la tarea: 
+#   
+   
+# Librerias
+library(tidyverse)
+
+# Leemos la base
+f_comun <- read_csv("http://segasi.com.mx/clases/cide/datos/RNPEDFC_procesado.csv",locale =locale(encoding ="latin1",asciify =TRUE)) %>% 
+  janitor::clean_names() %>% 
+  rename(fecha_ultima = fecha_en_que_se_le_vio_por_ultima_vez, 
+         hora_ultima = hora_en_que_se_le_vio_por_ultima_vez, 
+         pais_ultima = pais_en_que_se_le_vio_por_ultima_vez,
+         edo_ultima = entidad_en_que_se_le_vio_por_ultima_vez,
+         mpo_ultima = municipio_en_que_se_le_vio_por_ultima_vez,
+         loc_ultima = localidad_en_que_se_le_vio_por_ultima_vez,
+         dependencia_envio = dependencia_que_envio_la_informacion
+  )
+
+# Imprimimos la base 
+f_comun
+ 
+
+
+# Pregunta 1. Claudia Romero Infante: "_Mi duda para la clase del jueves sería cómo obtener la frecuencia para una gráfica con facetas_"
+#  Lo vemos más adelante. 😉
+
+
+# Pregunta 2. Luciana Wainer: "_a mi me gustaría volver a repasar la función ´mutate´ y poder platicar sobre el ejercicio 3 de la tarea_".
+#  Un `summarise` nos crea una nueva variable, a partir de una agrupación de una variable previa. 
+
+# La estructura es: 
+#   
+# 1. Agrupamos la tabla en función de una (o más) variables agrupadoras, con el `group_by()`. 
+# 
+# 2. Declaramos el nombre de la nueva variable/columna dentre del `summarise()`.
+# 
+# 3. Escribimos un `=` para hacer la asignación de información a esa nueva variable. 
+# 
+# 4. Escribimos la fórmula que crea las nuevas variables. 
+# 
+ 
+f_comun %>% 
+  group_by(anio, edo_ultima) %>% 
+  summarise(no_desapariciones = n(), 
+            edad_prom = max(na.omit(edad))
+  ) %>% 
+  ungroup()
+ 
+
+# Pregunta 3. Julio Gonzalez Gonzalez Duran: "_seria bueno repasar los argumentos de mutate porque hace tiempo que lo vimos y ahora estamos más en la paquetería de ggplot2_".
+
+# La función `mutate` sirve para crear variables a partir de otras variables, pero a diferencia de `summarise`, aquí no hay que agrupar ninguna variable. Es decir, la nueva variable creada tiene el mismo tamanio que toda la tabla. 
+# 
+# El formato es igual al anterior, 
+# 
+# 1. Usar mutate, 
+# 
+# 2. Nombre de la nueva variable, 
+# 
+# 3. Escribimos igual `=`
+# 
+# 4. Declaramos las fórmulas que crean la nueva variable.
+# 
+
+ 
+f_comun <- f_comun %>% 
+  mutate(anioPorDos = anio * 2, 
+         reciente = ifelse(test = anio >= 2000, 
+                           yes = "reciente", 
+                           no = "antiguo")
+  )
+# Si tienes duda de la función ifelse(), checa la ayuda ;)
+ 
+# Pregunta 4. Carlos Alberto Olvera Barajas: "_Una de mis dudas es cómo guardar una gráfica._"
+
+data("iris")
+iris %>% 
+  ggplot(aes(Sepal.Width, Sepal.Length)) + 
+  geom_point(color = "blue")
+ 
+# Ahora, para guardar la gráfica en la carpeta de nuestro proyecto, utilizamos la función siguiente. En este caso particular, la última gráfica graficada se guarda en la carpeta 03 Graficas con el nombre iris2.png, de tamaño 10cmX10cm. 
+
+ggsave(filename = "03 Graficas/iris2.png", 
+       height = 10, 
+       width = 10, 
+       units = "cm")
+ 
+
+# Pero en caso de que les cueste trabajo esto, o para cualquier emergencia, siempre pueden sacar un pantallazo :P. 
+# 
+# # Repaso tarea. 
+# 
+# ## Pregunta 5 que no me salió en la clase:
+# 
+# _Haz la misma gráfica que en el ejercicio 4, pero ahora incluye una faceta por estado. Esto implica que tendrás que cambiar la forma en que calculas el número de observaciones por año_.
+# 
+# ### Primero, creamos el tema
+# 
+ 
+# Reproducimos un tema de una grafica que vi en internet #
+tema_copiado <- theme(
+  text = element_text(family = "Arial"),  # Cambio todo el texto 
+  plot.title = element_text(hjust = 0.5, # Centro el titulo
+                            size = 15, # Tamano de letra
+                            family = "Arial-Black"), # Tipo de letra
+  plot.subtitle = element_text(hjust = 0.5), # Centro el subtitulo
+  axis.ticks = element_blank(), # Quito los ticks de los ejes
+  panel.background = element_rect(fill = "#faf1d5"), # Cambio color fondo
+  axis.line = element_line(color = "#000000", # Color de ejex y ejey
+                           size = 1, # Grosor de linea
+                           linetype = "solid"), # Patron de linea del eje x del panel del fondo
+  panel.grid.minor = element_line(color = "#e5e0cd", # Color linea
+                                  linetype = 2, # Tipo de linea del fondo (discontinua)
+                                  size = 1), # Grososr de linea del fondo
+  panel.grid.major = element_line(color = "#e5e0cd", # 
+                                  linetype = 2, # Tipo de linea del fondo (discontinua)
+                                  size = 1) # Grosor de linea del fondo
+) 
+
+ 
+
+### 2. Hacemos las gráficas
+
+# **Nota:** El faceteado se incorpora en la función `facet_wrap()`, que lo que hace es ordenar las gráficas en matrices de gráficas, con el objetivo de poder visualizar tres dimensiones en una misma gráfica (en este caso las dimensiones son espacio = estados, tiempo = años y magnitud = No. de Desaparecidos). 
+# 
+# En el caso siguiente, `facet_wrap()` tiene como argumentos los siguientes: 
+  
+# 1. `~edo_ultima`, la formula que genera el "faceteo".
+# 
+# 2. `n_col`, el numero de columnas de mi matriz de graficas. 
+# 
+# 3. `scales = "free_x"`, indica que queremos que los ejes x esten libres para todas las gráficas. Si quisieramos liberar el eje y utilizamos `"free_y"` y si queremos liberar ambos ejes utilizamos "free". En caso de que no queramos librerar nada y que todo sea comparable entre espacio y tiempo, hay que dejar el default en el argumento.  
+
+ 
+# Copiamos el codigo de arriba, y agrupamos por estado
+obs_x_anio_2 <- f_comun %>% 
+  group_by(anio, edo_ultima) %>% 
+  filter(anio >= 2006) %>%  # Filtramos datos para tener del 2006 al 2018 
+  summarise(casosPorAnio = n()) # Contamos (ES LO MISMO QUE LA FN. count)
+
+# Hacemos el plot
+obs_x_anio_2 %>% 
+  # Quitamos los estados no especificados
+  filter(edo_ultima != "NO ESPECIFICADO") %>% 
+  ggplot() + 
+  geom_line(aes(x = anio, y = casosPorAnio), 
+            color = "red", 
+            lineend = "round", 
+            linetype = "dashed"
+  ) +  
+  geom_point(aes(x = anio, y = casosPorAnio),
+             color = "black", size = 1) + 
+  facet_wrap(~edo_ultima, ncol = 8, scales = "free_x") +
+  labs(title = "Número de desaparecidos a lo largo del tiempo",
+       y = "",
+       subtitle = "Años de registro: 2006 a 2018",
+       caption = "Datos del Fuero Común del \nRegistro Nacional de Datos de Personas Extraviadas o Desaparecidas (RNPED)", 
+       x = "Año"
+  ) +
+  scale_y_continuous(breaks = c(0,500,1000), labels =   scales::dollar_format(prefix = "", suffix = "\ndesaparecidos")) +
+  scale_x_continuous(breaks = c(2006, 2010, 2014, 2017), 
+                     limits = c(2006, 2018)
+  ) +
+  tema_copiado +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 90))
