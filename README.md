@@ -33,6 +33,6 @@ En esta sesión se revisó lo de los tipos de letra; como instalarlos, como busc
 
 **Labo 8**
 
-Sesión de repaso previa al exámen. Consultar en este [enlace](http://rpubs.com/Juve_Campos/repasoPrevioExamen).
+Sesión de repaso previa al segundo exámen. Consultar en este [enlace](http://rpubs.com/Juve_Campos/repasoPrevioExamen).
 
 
