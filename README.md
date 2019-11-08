@@ -35,4 +35,7 @@ En esta sesión se revisó lo de los tipos de letra; como instalarlos, como busc
 
 Sesión de repaso previa al segundo exámen. Consultar en este [enlace](http://rpubs.com/Juve_Campos/repasoPrevioExamen).
 
+**Labo 9**
+
+Sesión donde se revisó la función curl::curl_download() para descargar archivos desde internet a partir de una url, la función tidyverse::pull() para extraer vectores de una base de datos y las paletas de colores para poder personalizar los colores dentro de nuestras gráficas. 
 
