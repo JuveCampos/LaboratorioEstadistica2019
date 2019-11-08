@@ -37,5 +37,5 @@ Sesión de repaso previa al segundo exámen. Consultar en este [enlace](http://r
 
 **Labo 9**
 
-Sesión donde se revisó la función curl::curl_download() para descargar archivos desde internet a partir de una url, la función tidyverse::pull() para extraer vectores de una base de datos y las paletas de colores para poder personalizar los colores dentro de nuestras gráficas. 
+Sesión donde se revisó la función `curl::curl_download()` para descargar archivos desde internet a partir de una `url`, la función `tidyverse::pull()` para extraer vectores de una base de datos y las `paletas` de colores para poder personalizar los colores dentro de nuestras gráficas. 
 
