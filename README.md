@@ -21,7 +21,7 @@ Sesión de repaso. En esta sesión repasamos el concepto de NAs, el de suma de v
 
 **Labo 5**
 
-Sesión de repaso. En esta sesión aprendimos a cargar bases de datos `*.shp`, y practicamos algunos verbos del `tidyverse`. Igualmente, se introducen al final las funciones `pull()` para extraer vectores a partir de columnas de `tibbles/dataframes` y la función `case_when()` para recodificar una variable en base a una multitud de condiciones. Consultar más en este [enlace] (http://rpubs.com/Juve_Campos/laboEstadisticaSesion4) 
+Sesión de repaso. En esta sesión aprendimos a cargar bases de datos `*.shp`, y practicamos algunos verbos del `tidyverse`. Igualmente, se introducen al final las funciones `pull()` para extraer vectores a partir de columnas de `tibbles/dataframes` y la función `case_when()` para recodificar una variable en base a una multitud de condiciones. Consultar más en este [enlace](http://rpubs.com/Juve_Campos/laboEstadisticaSesion4) 
 
 **Labo 6**
 
