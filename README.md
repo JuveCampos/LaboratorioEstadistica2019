@@ -41,6 +41,6 @@ Sesión donde se revisó la función `curl::curl_download()` para descargar arch
 
 **Labo 10**
 
-Sesión en la que se introdujo el concepto de expresiones regulares `<regexp>` para generalizar patrones con la librería `rebus`. 
+Sesión en la que se introdujo el concepto de expresiones regulares `<regexp>` para generalizar patrones con la librería `rebus`. Contiene la presentación de introducción y ejercicios planeados. 
 
 
