@@ -39,3 +39,8 @@ Sesión de repaso previa al segundo exámen. Consultar en este [enlace](http://r
 
 Sesión donde se revisó la función `curl::curl_download()` para descargar archivos desde internet a partir de una `url`, la función `tidyverse::pull()` para extraer vectores de una base de datos y las `paletas` de colores para poder personalizar los colores dentro de nuestras gráficas. 
 
+**Labo 10**
+
+Sesión en la que se introdujo el concepto de expresiones regulares `<regexp>` para generalizar patrones con la librería `rebus`. 
+
+
