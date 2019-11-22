@@ -43,4 +43,9 @@ Sesión donde se revisó la función `curl::curl_download()` para descargar arch
 
 Sesión en la que se introdujo el concepto de expresiones regulares `<regexp>` para generalizar patrones con la librería `rebus`. Contiene la presentación de introducción y ejercicios planeados. 
 
+**Labo 11**
+
+Sesión de introducción a análisis de estadística descriptiva (EDA) a partir de las edades de los alumnos de nuevo ingreso de la UACh. 
+
+
 
