@@ -45,7 +45,7 @@ Sesión en la que se introdujo el concepto de expresiones regulares `<regexp>` p
 
 **Labo 11**
 
-Sesión de introducción a análisis de estadística descriptiva (EDA) a partir de las edades de los alumnos de nuevo ingreso de la UACh. 
+Sesión de introducción a análisis de estadística descriptiva (EDA) a partir de las edades de los alumnos de nuevo ingreso de la UACh. Se revisaron los conceptos del `$`, las funciones `mean()`, `median()` y la obtención de la moda mediante verbos de dplyr, así como elaboración de gráficos boxplot y de densidad. 
 
 
 
