@@ -108,24 +108,27 @@ datos %>%
   geom_smooth(method = "lm")
 # Podemos ver la relacion positiva y directa entre ambas variables.
 
-
 ############
 # GRAFICAS #
 ############
 
 # Grafica
-datos %>% 
+box <- datos %>% 
   ggplot(aes(x = 1, 
              y = sistolicBloodPressure)) + 
   geom_boxplot() + 
   coord_flip()
 
+plotly::ggplotly(box)
+
 # Obtenemos los puntos a mano: 
 
 # Cuartiles: Q1, Q2, Q3 
-q1 <- quantile(datos$sistolicBloodPressure, 0.25) 
-q2 <- quantile(datos$sistolicBloodPressure, 0.5)  # Mediana
-q3 <- quantile(datos$sistolicBloodPressure, 0.75)
+# NOTA: Uso type = 5 porque es el método que utiliza ggplot para 
+#   calcular automáticamente los cuantiles. 
+q1 <- quantile(datos$sistolicBloodPressure, 0.25, type = 5) 
+q2 <- quantile(datos$sistolicBloodPressure, 0.5, type = 5)  # Mediana
+q3 <- quantile(datos$sistolicBloodPressure, 0.75, type = 5)
 
 # Rango intercuantil 
 ri <- q3 - q1
@@ -145,21 +148,27 @@ names(ri) <- NULL # quitamos el nombre confuso de "75%"
       summarise(minimo = min(sistolicBloodPressure)) %>% 
       pull()
     
+    bigoteIzquierdo
+    
     # COMO VEMOS, EL VALOR MINIMO ESTA MAS CERCA QUE EL 1.5 R.I. 
     #   Por lo tanto, el bracito/bigote llega hasta acá. 
 
     
 # Bigote derecho
 #################
-    datos %>% 
-      summarise(maximo = max(sistolicBloodPressure))
     
     # Q1 - 1.5 el rango intercuantil 
     q3 + 1.5 * ri # (vALOR MÁXIMO HASTA EL CUAL SE PUEDE EXTENDER EL BIGOTE)
     
+    
+    # Calculo del bigote derecho
+    bigoteDerecho <- datos %>% 
+      summarise(maximo = max(sistolicBloodPressure)) %>% 
+      pull()
+    
+    bigoteDerecho
+   
     # COMO VEMOS, EL VALOR MÁXIMO ESTA MAS CERCA QUE EL 1.5 R.I. 
     #   Por lo tanto, el bracito/bigote llega hasta acá (VALOR MÁXIMO). 
 
-    
-    
     
