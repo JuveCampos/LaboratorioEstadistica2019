@@ -5,6 +5,8 @@
 library(curl)
 library(tidyverse)
 library(readxl)
+library(janitor)
+
 curl_download(url = "http://upom.chapingo.mx/Descargas/base_datos/acumuladas/BD_Alumnos_2005-2018.xlsx", 
               destfile = "anuarioChapingo.xlsx")
 
